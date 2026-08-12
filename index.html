@@ -3,154 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Reels App</title>
+  <title>NAZAR Reels</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
-
-    .reels-container {
-      height: 100vh;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scrollbar-width: none;
-    }
-    .reels-container::-webkit-scrollbar { display: none; }
-
-    .reel-card {
-      height: 100vh;
-      width: 100vw;
-      scroll-snap-align: start;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-    }
-
-    video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .right-actions {
-      position: absolute;
-      right: 15px;
-      bottom: 80px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      z-index: 10;
-    }
-    .action-btn {
-      background: rgba(0,0,0,0.5);
-      border: none;
-      color: #fff;
-      font-size: 24px;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-
-    .reel-info {
-      position: absolute;
-      bottom: 25px;
-      left: 15px;
-      right: 70px;
-      z-index: 10;
-    }
-    .username { font-weight: bold; font-size: 15px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
-    .caption { font-size: 13px; opacity: 0.9; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
-
-    .top-sound-btn {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      z-index: 100;
-      background: rgba(0,0,0,0.6);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.3);
-      font-size: 13px;
-      cursor: pointer;
-    }
+    .container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
+    .card { height: 100vh; width: 100vw; scroll-snap-align: start; position: relative; background: #000; display: flex; align-items: center; justify-content: center; }
+    video { width: 100%; height: 100%; object-fit: cover; }
+    
+    /* ये रहा वो बटन जो वीडियो चलाएगा */
+    .play-btn { position: absolute; z-index: 50; padding: 20px 40px; background: rgba(255,0,0,0.8); border: none; color: #fff; font-size: 20px; border-radius: 10px; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <button class="top-sound-btn" onclick="toggleAudio()" id="soundBtn">🔊 आवाज़ चालू करें</button>
-
-  <div class="reels-container" id="reelFeed"></div>
+  <div class="container" id="feed"></div>
 
   <script>
-    // ये बिल्कुल पक्के और चालू वीडियो लिंक हैं
-    const reelsData = [
-      {
-        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-        user: "@Nazar_Official",
-        text: "🔥 पहली ट्रेंडिंग रील - NAZAR स्पेशल"
-      },
-      {
-        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-        user: "@Nazar_Vibes",
-        text: "😎 स्वैग वाला अंदाज़ #trending"
-      },
-      {
-        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-        user: "@Nazar_Style",
-        text: "✨ नया वायरल वीडियो 🚀"
-      }
+    const videos = [
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4"
     ];
 
-    const feed = document.getElementById('reelFeed');
-
-    reelsData.forEach(item => {
+    const feed = document.getElementById('feed');
+    videos.forEach(src => {
       feed.innerHTML += `
-        <div class="reel-card">
-          <video src="${item.src}" loop playsinline autoplay muted></video>
-          
-          <div class="right-actions">
-            <button class="action-btn" onclick="this.style.color = this.style.color === 'red' ? '#fff' : 'red'">❤️</button>
-            <button class="action-btn">💬</button>
-            <button class="action-btn">↗️</button>
-          </div>
-
-          <div class="reel-info">
-            <div class="username">${item.user}</div>
-            <div class="caption">${item.text}</div>
-          </div>
+        <div class="card">
+          <video src="${src}" loop playsinline></video>
+          <button class="play-btn" onclick="this.parentElement.querySelector('video').play(); this.style.display='none'">▶ वीडियो चलाएं</button>
         </div>
       `;
     });
-
-    let isMuted = true;
-    function toggleAudio() {
-      isMuted = !isMuted;
-      document.querySelectorAll('video').forEach(v => v.muted = isMuted);
-      document.getElementById('soundBtn').innerText = isMuted ? "🔊 आवाज़ चालू करें" : "🔇 आवाज़ बंद करें";
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        let v = e.target.querySelector('video');
-        if (e.isIntersecting) {
-          v.play().catch(() => {});
-        } else {
-          v.pause();
-        }
-      });
-    }, { threshold: 0.6 });
-
-    document.querySelectorAll('.reel-card').forEach(c => observer.observe(c));
   </script>
 </body>
 </html>
+
 
 
 
