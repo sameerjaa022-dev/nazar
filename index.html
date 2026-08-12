@@ -1,103 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NAZAR Reels</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; display: flex; justify-content: center; height: 100vh; overflow: hidden; font-family: sans-serif; }
-    .app { width: 100%; max-width: 420px; height: 100vh; position: relative; background: #000; }
-    .header { position: absolute; top: 0; width: 100%; padding: 15px; z-index: 20; display: flex; justify-content: space-between; align-items: center; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
-    .title { font-size: 1.5rem; font-weight: bold; color: #e50914; }
-    .btn-group { display: flex; gap: 8px; }
-    .btn { background: rgba(255,255,255,0.2); color: #fff; border: 1px solid #fff; padding: 6px 12px; border-radius: 20px; font-size: 12px; text-decoration: none; font-weight: bold; backdrop-filter: blur(5px); cursor: pointer; }
-    .download-btn { background: #e50914; border-color: #e50914; }
-    .reels { width: 100%; height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-    .reels::-webkit-scrollbar { display: none; }
-    .reel { width: 100%; height: 100vh; scroll-snap-align: start; position: relative; background: #111; display: flex; align-items: center; justify-content: center; }
+    body { margin: 0; background: #000; overflow: hidden; }
+    .video-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
+    .video-box { height: 100vh; scroll-snap-align: start; position: relative; }
     video { width: 100%; height: 100%; object-fit: cover; }
-    .info { position: absolute; bottom: 40px; left: 15px; z-index: 10; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); }
-    .info h3 { font-size: 16px; margin-bottom: 5px; color: #fff; }
-    .info p { font-size: 14px; color: #ddd; }
   </style>
 </head>
 <body>
-  <div class="app">
-    <div class="header">
-      <div class="title">NAZAR</div>
-      <div class="btn-group">
-        <a href="#" class="btn download-btn">📲 Download App</a>
-        <button class="btn" onclick="toggleSound()">🔊 Sound</button>
-      </div>
-    </div>
-    
-    <div class="reels" id="reelsContainer"></div>
-  </div>
-
+  <div class="video-container" id="container"></div>
   <script>
-    const videoList = [
-      { src: "https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4", tag: "❤️ मोहब्बत शायरी" },
-      { src: "https://assets.mixkit.co/videos/preview/mixkit-mother-with-her-little-daughter-eating-a-marshmallow-in-41394-large.mp4", tag: "🔥 बदमाशी एटीट्यूड" },
-      { src: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4", tag: "😂 फुल कॉमेडी" },
-      { src: "https://assets.mixkit.co/videos/preview/mixkit-fashion-model-in-neon-light-41551-large.mp4", tag: "💥 ट्रेंडिंग रील" },
-      { src: "https://assets.mixkit.co/videos/preview/mixkit-young-woman-skating-on-a-sunny-day-42721-large.mp4", tag: "✨ एटीट्यूड स्टेटस" }
+    const videos = [
+      "https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4",
+      "https://assets.mixkit.co/videos/preview/mixkit-mother-with-her-little-daughter-eating-a-marshmallow-in-41394-large.mp4",
+      "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4"
     ];
-
-    const container = document.getElementById('reelsContainer');
-    let isMuted = true;
-
-    function addMoreReels() {
-      for (let i = 0; i < 3; i++) {
-        videoList.forEach(item => {
-          const reel = document.createElement('div');
-          reel.className = 'reel';
-          reel.innerHTML = `
-            <video src="${item.src}" loop muted playsinline preload="auto"></video>
-            <div class="info">
-              <h3>@nazar_official</h3>
-              <p>${item.tag}</p>
-            </div>
-          `;
-          container.appendChild(reel);
-        });
-      }
-      setupObserver();
-    }
-
-    function setupObserver() {
-      const videos = document.querySelectorAll('video');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.play().catch(() => {});
-          } else {
-            entry.target.pause();
-            entry.target.currentTime = 0;
-          }
-        });
-      }, { threshold: 0.6 });
-
-      videos.forEach(v => observer.observe(v));
-    }
-
-    function toggleSound() {
-      isMuted = !isMuted;
-      document.querySelectorAll('video').forEach(v => {
-        v.muted = isMuted;
-      });
-    }
-
-    container.addEventListener('scroll', () => {
-      if (container.scrollTop + container.clientHeight >= container.scrollHeight - 800) {
-        addMoreReels();
-      }
+    const container = document.getElementById('container');
+    videos.forEach(src => {
+      const div = document.createElement('div');
+      div.className = 'video-box';
+      div.innerHTML = `<video src="${src}" loop playsinline onclick="this.play()"></video>`;
+      container.appendChild(div);
     });
-
-    addMoreReels();
   </script>
 </body>
 </html>
+
 
 
 
