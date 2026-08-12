@@ -3,53 +3,55 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Instagram Reels</title>
+  <title>NAZAR Reels</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; overflow: hidden; }
+    body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
 
-    /* ऊपर आवाज़ चालू करने का स्टाइलिश बटन */
+    /* ऊपर आवाज़ का बटन */
     .top-bar { position: fixed; top: 12px; right: 15px; z-index: 50; }
-    .audio-btn { background: rgba(0, 0, 0, 0.7); color: #fff; border: 1px solid #fff; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; backdrop-filter: blur(5px); }
+    .audio-btn { background: rgba(0,0,0,0.8); color: #fff; border: 1px solid #fff; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; }
 
-    /* इंस्टाग्राम रील्स की तरह वर्टिकल स्क्रॉल कंटेनर */
+    /* रील्स फीड */
     .reels-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
     .reels-container::-webkit-scrollbar { display: none; }
 
-    /* हर एक रील फुल स्क्रीन और स्नैप होगी */
-    .reel-card { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
-
-    /* वीडियो बिल्कुल फिट और साफ़ */
+    .reel-card { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #111; }
+    
+    /* वीडियो स्टाइल */
     video { width: 100%; height: 100%; object-fit: cover; }
 
-    /* इंस्टाग्राम की तरह दाईं ओर लाइक, कमेंट, शेयर बटन */
-    .right-actions { position: absolute; right: 15px; bottom: 90px; z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 20px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-    .action-item { background: none; border: none; color: #fff; cursor: pointer; text-align: center; }
-    .action-item span { display: block; font-size: 28px; margin-bottom: 3px; }
-    .action-item p { font-size: 12px; font-weight: bold; }
+    /* प्ले करने के लिए बड़ा बटन अगर वीडियो रुके तो */
+    .play-trigger { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.6); color: #fff; padding: 15px 25px; border-radius: 30px; font-size: 16px; border: 1px solid #fff; z-index: 15; cursor: pointer; }
 
-    /* नीचे आईडी और कैप्शन (इंस्टाग्राम स्टाइल) */
+    /* दाईं तरफ के बटन */
+    .right-actions { position: absolute; right: 15px; bottom: 85px; z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 18px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+    .action-item { background: none; border: none; color: #fff; cursor: pointer; text-align: center; }
+    .action-item span { display: block; font-size: 26px; margin-bottom: 2px; }
+    .action-item p { font-size: 11px; font-weight: bold; }
+
+    /* नीचे आईडी और कैप्शन */
     .reel-info { position: absolute; bottom: 30px; left: 15px; right: 80px; z-index: 10; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-    .user-profile { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .avatar { width: 36px; height: 36px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 1.5px solid #fff; }
-    .username { font-size: 15px; font-weight: bold; }
-    .follow-span { font-size: 12px; border: 1px solid #fff; padding: 3px 10px; border-radius: 4px; background: rgba(255,255,255,0.1); cursor: pointer; }
-    .caption { font-size: 13px; color: #f1f1f1; line-height: 1.4; }
+    .user-profile { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .avatar { width: 34px; height: 34px; background: #ff0050; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 1px solid #fff; }
+    .username { font-size: 14px; font-weight: bold; }
+    .follow-btn { font-size: 11px; border: 1px solid #fff; padding: 2px 8px; border-radius: 4px; background: rgba(255,255,255,0.2); cursor: pointer; }
+    .caption { font-size: 12px; color: #eee; }
   </style>
 </head>
 <body>
 
-  <!-- आवाज़ खोलने का बटन -->
+  <!-- आवाज़ चालू करने का बटन -->
   <div class="top-bar">
-    <button class="audio-btn" onclick="toggleAudio()" id="soundBtn">🔊 आवाज़ चालू करें</button>
+    <button class="audio-btn" onclick="toggleAudio()" id="soundBtn">🔊 आवाज़ चालू करें</button>
   </div>
 
-  <!-- रील्स फीड -->
   <div class="reels-container" id="feed">
     
     <!-- रील 1 -->
     <div class="reel-card">
-      <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" loop playsinline autoplay muted></video>
+      <video src="https://www.w3schools.com/html/mov_bbb.mp4" loop playsinline autoplay muted></video>
+      <div class="play-trigger" onclick="forcePlay(this)">▶ वीडियो चलाएं</div>
       <div class="right-actions">
         <button class="action-item" onclick="this.style.color='#ff2d55'"><span>❤️</span><p>124K</p></button>
         <button class="action-item"><span>💬</span><p>412</p></button>
@@ -59,15 +61,16 @@
         <div class="user-profile">
           <div class="avatar">N</div>
           <span class="username">@nazar_reels_1</span>
-          <span class="follow-span" onclick="this.innerText='फॉलो किया'">फॉलो करें</span>
+          <span class="follow-btn" onclick="this.innerText='फॉलो किया'">फॉलो करें</span>
         </div>
-        <div class="caption">इंस्टाग्राम जैसी शानदार और मज़ेदार रील्स सिर्फ NAZAR पर 🔥 #2026 #viral</div>
+        <div class="caption">इंस्टाग्राम जैसी शानदार और मज़ेदार रील्स सिर्फ NAZAR पर 🔥</div>
       </div>
     </div>
 
     <!-- रील 2 -->
     <div class="reel-card">
-      <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" loop playsinline autoplay muted></video>
+      <video src="https://media.w3.org/2010/05/sintel/trailer.mp4" loop playsinline autoplay muted></video>
+      <div class="play-trigger" onclick="forcePlay(this)">▶ वीडियो चलाएं</div>
       <div class="right-actions">
         <button class="action-item" onclick="this.style.color='#ff2d55'"><span>❤️</span><p>85.2K</p></button>
         <button class="action-item"><span>💬</span><p>230</p></button>
@@ -77,27 +80,9 @@
         <div class="user-profile">
           <div class="avatar">G</div>
           <span class="username">@global_trending</span>
-          <span class="follow-span" onclick="this.innerText='फॉलो किया'">फॉलो करें</span>
+          <span class="follow-btn" onclick="this.innerText='फॉलो किया'">फॉलो करें</span>
         </div>
         <div class="caption">बेहतरीन क्वालिटी और बिना रुके चलने वाले वीडियो 🚀</div>
-      </div>
-    </div>
-
-    <!-- रील 3 -->
-    <div class="reel-card">
-      <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" loop playsinline autoplay muted></video>
-      <div class="right-actions">
-        <button class="action-item" onclick="this.style.color='#ff2d55'"><span>❤️</span><p>250K</p></button>
-        <button class="action-item"><span>💬</span><p>1.2K</p></button>
-        <button class="action-item"><span>🔁</span><p>शेयर</p></button>
-      </div>
-      <div class="reel-info">
-        <div class="user-profile">
-          <div class="avatar">D</div>
-          <span class="username">@desi_beats_official</span>
-          <span class="follow-span" onclick="this.innerText='फॉलो किया'">फॉलो करें</span>
-        </div>
-        <div class="caption">नया अंदाज़, नए गाने और फुल एंटरटेनमेंट ✨</div>
       </div>
     </div>
 
@@ -106,139 +91,36 @@
   <script>
     let isMuted = true;
 
-    // आवाज़ चालू/बंद करने का फंक्शन
     function toggleAudio() {
       isMuted = !isMuted;
-      document.querySelectorAll('video').forEach(v => {
-        v.muted = isMuted;
-      });
-      document.getElementById('soundBtn').innerText = isMuted ? "🔊 आवाज़ चालू करें" : "🔇 आवाज़ बंद करें";
+      document.querySelectorAll('video').forEach(v => { v.muted = isMuted; });
+      document.getElementById('soundBtn').innerText = isMuted ? "🔊 आवाज़ चालू करें" : "🔇 आवाज़ बंद करें";
     }
 
-    // जो रील स्क्रीन पर सामने आएगी, वही चलेगी (बाकी रुक जाएंगी)
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        let video = entry.target.querySelector('video');
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-          video.currentTime = 0;
-        }
-      });
-    }, { threshold: 0.6 });
-
-    document.querySelectorAll('.reel-card').forEach(card => observer.observe(card));
-  </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Reels</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
-
-    /* रील्स फीड */
-    .reels-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-    .reels-container::-webkit-scrollbar { display: none; }
-
-    /* रील कार्ड */
-    .reel-card { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
-
-    /* वीडियो फुल स्क्रीन और क्लियर */
-    video { width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-
-    /* इंस्टाग्राम जैसे दाईं तरफ के बटन */
-    .right-actions { position: absolute; right: 15px; bottom: 80px; z-index: 10; display: flex; flex-direction: column; align-items: center; gap: 20px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-    .action-item { background: none; border: none; color: #fff; cursor: pointer; text-align: center; }
-    .action-item span { display: block; font-size: 28px; margin-bottom: 3px; }
-    .action-item p { font-size: 12px; font-weight: bold; }
-
-    /* नीचे आईडी और कैप्शन */
-    .reel-info { position: absolute; bottom: 30px; left: 15px; right: 80px; z-index: 10; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-    .user-profile { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .avatar { width: 36px; height: 36px; background: #ff0050; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; border: 1.5px solid #fff; }
-    .username { font-size: 15px; font-weight: bold; }
-    .caption { font-size: 13px; color: #f1f1f1; }
-
-    /* स्क्रीन पर टच करने वाला मैजिक बटन ताकि आवाज़ तुरंत आए */
-    .tap-to-play { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; z-index: 5; font-size: 18px; color: #fff; font-weight: bold; text-shadow: 0 2px 5px rgba(0,0,0,0.8); transition: opacity 0.3s; }
-  </style>
-</head>
-<body>
-
-  <div class="reels-container" id="feed">
-    
-    <!-- रील 1 -->
-    <div class="reel-card">
-      <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" loop playsinline></video>
-      <div class="tap-to-play" onclick="playVideo(this)">▶ वीडियो और आवाज़ चालू करने के लिए यहाँ टच करें</div>
-      <div class="right-actions">
-        <button class="action-item" onclick="this.style.color='#ff2d55'"><span>❤️</span><p>124K</p></button>
-        <button class="action-item"><span>💬</span><p>412</p></button>
-        <button class="action-item"><span>🔁</span><p>शेयर</p></button>
-      </div>
-      <div class="reel-info">
-        <div class="user-profile">
-          <div class="avatar">N</div>
-          <span class="username">@nazar_reels_1</span>
-        </div>
-        <div class="caption">इंस्टाग्राम जैसी शानदार रील्स 🔥</div>
-      </div>
-    </div>
-
-    <!-- रील 2 -->
-    <div class="reel-card">
-      <video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" loop playsinline></video>
-      <div class="tap-to-play" onclick="playVideo(this)">▶ वीडियो और आवाज़ चालू करने के लिए यहाँ टच करें</div>
-      <div class="right-actions">
-        <button class="action-item" onclick="this.style.color='#ff2d55'"><span>❤️</span><p>85.2K</p></button>
-        <button class="action-item"><span>💬</span><p>230</p></button>
-        <button class="action-item"><span>🔁</span><p>शेयर</p></button>
-      </div>
-      <div class="reel-info">
-        <div class="user-profile">
-          <div class="avatar">G</div>
-          <span class="username">@global_trending</span>
-        </div>
-        <div class="caption">बेहतरीन क्वालिटी और मज़ेदार वीडियो 🚀</div>
-      </div>
-    </div>
-
-  </div>
-
-  <script>
-    function playVideo(element) {
-      let card = element.parentElement;
+    function forcePlay(btn) {
+      let card = btn.parentElement;
       let video = card.querySelector('video');
-      
-      // बाकी सारी वीडियो को रोक दें
-      document.querySelectorAll('video').forEach(v => {
-        if(v !== video) { v.pause(); v.muted = true; }
-      });
-
-      // इस वीडियो की आवाज़ खोलकर चला दें
       video.muted = false;
       video.play();
-      element.style.display = 'none'; // टच वाला टेक्स्ट छिपा दें
+      btn.style.display = 'none';
+      isMuted = false;
+      document.getElementById('soundBtn').innerText = "🔇 आवाज़ बंद करें";
     }
 
-    // स्क्रॉल करने पर वीडियो मैनेज करना
+    // ऑटोमैटिक प्ले और पॉज़ करने के लिए
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         let video = entry.target.querySelector('video');
-        let overlay = entry.target.querySelector('.tap-to-play');
+        let btn = entry.target.querySelector('.play-trigger');
         if (entry.isIntersecting) {
-          // वीडियो सामने आते ही प्ले होगा (म्यूट पर ताकि ब्राउज़र रोके नहीं)
-          video.play().catch(() => {});
+          video.play().then(() => {
+            if(btn) btn.style.display = 'none';
+          }).catch(() => {
+            if(btn) btn.style.display = 'block';
+          });
         } else {
           video.pause();
           video.currentTime = 0;
-          if(overlay) overlay.style.display = 'flex'; // वापस आने पर टच बटन दिखेगा
         }
       });
     }, { threshold: 0.6 });
@@ -247,6 +129,7 @@
   </script>
 </body>
 </html>
+
 
 
 
