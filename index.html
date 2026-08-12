@@ -3,39 +3,64 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Reels - Trending</title>
+  <title>NAZAR Reels - Share & Enjoy</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
+    
     .reels-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
     .reels-container::-webkit-scrollbar { display: none; }
+    
     .reel-card { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
+    
     video { width: 100%; height: 100%; object-fit: cover; }
-    .audio-btn { position: fixed; top: 15px; right: 15px; z-index: 100; background: rgba(0,0,0,0.5); color: #fff; border: 1px solid #fff; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-    .info { position: absolute; bottom: 30px; left: 15px; z-index: 10; text-shadow: 1px 1px 2px #000; }
-    .actions { position: absolute; bottom: 80px; right: 15px; z-index: 10; text-align: center; font-size: 24px; }
+    
+    /* आवाज़ चालू करने का बटन */
+    .audio-top-btn { position: fixed; top: 15px; right: 15px; z-index: 100; background: rgba(0,0,0,0.7); color: #fff; border: 1px solid #fff; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; }
+
+    /* दाईं ओर के बटन (लाइक, शेयर, डाउनलोड) */
+    .controls { position: absolute; right: 15px; bottom: 80px; z-index: 10; text-align: center; }
+    .btn { background: rgba(0,0,0,0.6); color: white; border: 1px solid white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 12px; cursor: pointer; }
+    .share-btn { background: #25D366; border: none; } /* WhatsApp हरा रंग */
+    .download-btn { background: #ff0050; color: white; border: none; padding: 7px 10px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 5px; display: block; text-decoration: none; font-size: 11px; }
+
+    /* नीचे आईडी और कैप्शन */
+    .info { position: absolute; bottom: 30px; left: 15px; right: 80px; z-index: 10; text-shadow: 1px 1px 3px rgba(0,0,0,0.9); }
   </style>
 </head>
 <body>
-  <button class="audio-btn" onclick="toggleAudio()" id="soundBtn">🔊 आवाज़ चालू</button>
+
+  <button class="audio-top-btn" onclick="toggleAudio()" id="soundBtn">🔊 आवाज़ चालू करें</button>
   <div class="reels-container" id="feed"></div>
 
   <script>
+    // यहाँ आप और भी रील्स बढ़ा सकते हैं
     const reels = [
-      { src: "https://www.w3schools.com/html/mov_bbb.mp4", user: "Mohabbat_Status", desc: "प्यार की राहों में... ❤️" },
-      { src: "https://media.w3.org/2010/05/sintel/trailer.mp4", user: "Breakup_Dard", desc: "टूटा हुआ दिल... 💔" },
-      { src: "https://www.w3schools.com/html/movie.mp4", user: "Badmashi_King", desc: "रॉयल अंदाज़, रॉयल स्वैग 😎" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", user: "Comedy_Blast", desc: "हँसते-हँसते लोट-पोट 😂" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", user: "Nazar_Special", desc: "NAZAR का नया धमाका 🔥" }
+      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", title: "प्यार और मोहब्बत का अंदाज़ ❤️", user: "@Mohabbat_HD" },
+      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", title: "बदमाशी और खतरनाक स्वैग 😎", user: "@Badmashi_King" },
+      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", title: "हंसते-हंसते पेट में दर्द कॉमेडी 😂", user: "@Comedy_Blast" },
+      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", title: "ब्रेकअप और दर्द भरी शायरी 💔", user: "@Dard_Status" },
+      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", title: "NAZAR स्पेशल HD वायरल रील 🔥", user: "@Nazar_Official" }
     ];
 
     const feed = document.getElementById('feed');
     reels.forEach(r => {
+      // WhatsApp पर शेयर करने का मैसेज
+      let shareText = encodeURIComponent(`देख भाई क्या गज़ब की रील है: ${r.title} - NAZAR Reels पर देख!`);
+      let shareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
+
       feed.innerHTML += `
         <div class="reel-card">
           <video src="${r.src}" loop playsinline autoplay muted></video>
-          <div class="actions">❤️<br>💬<br>🔁</div>
-          <div class="info"><h3>@${r.user}</h3><p>${r.desc}</p></div>
+          <div class="controls">
+            <div class="btn" onclick="this.style.background='#ff2d55'">❤️</div>
+            <a href="${shareUrl}" target="_blank" class="btn share-btn" title="दोस्तों को भेजें">📤</a>
+            <a href="${r.src}" download class="download-btn">⬇️ डाउनलोड</a>
+          </div>
+          <div class="info">
+            <h4 style="font-size:14px; margin-bottom:4px; color:#ddd;">${r.user}</h4>
+            <h3 style="font-size:15px; font-weight:normal;">${r.title}</h3>
+          </div>
         </div>`;
     });
 
@@ -43,19 +68,26 @@
     function toggleAudio() {
       isMuted = !isMuted;
       document.querySelectorAll('video').forEach(v => v.muted = isMuted);
-      document.getElementById('soundBtn').innerText = isMuted ? "🔊 आवाज़ चालू" : "🔇 आवाज़ बंद";
+      document.getElementById('soundBtn').innerText = isMuted ? "🔊 आवाज़ चालू करें" : "🔇 आवाज़ बंद करें";
     }
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         let v = e.target.querySelector('video');
-        e.isIntersecting ? v.play() : v.pause();
+        if (e.isIntersecting) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+          v.currentTime = 0;
+        }
       });
     }, { threshold: 0.6 });
+
     document.querySelectorAll('.reel-card').forEach(c => observer.observe(c));
   </script>
 </body>
 </html>
+
 
 
 
