@@ -1,44 +1,99 @@
-
-<html lang="en"
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NAZAR Reels</title>
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { background:#000; color:#fff; display:flex; justify-content:center; height:100vh; overflow:hidden; }
-    .app { width:100%; max-width:420px; height:100vh; position:relative; }
-    .header { position:absolute; top:0; width:100%; padding:15px; z-index:20; display:flex; justify-content:space-between; }
+    body { background:#000; color:#fff; display:flex; justify-content:center; height:100vh; overflow:hidden; font-family:sans-serif; }
+    .app { width:100%; max-width:420px; height:100vh; position:relative; background:#000; }
+    .header { position:absolute; top:0; width:100%; padding:15px; z-index:20; display:flex; justify-content:space-between; align-items:center; background:linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); }
     .title { font-size:1.5rem; font-weight:bold; color:#e50914; }
-    .sound { background:rgba(0,0,0,0.5); color:#fff; border:1px solid #fff; padding:5px 10px; border-radius:15px; }
-    .reels { width:100%; height:100vh; overflow-y:scroll; scroll-snap-type:y mandatory; }
-    .reel { width:100%; height:100vh; scroll-snap-align:start; position:relative; }
+    .btn-group { display:flex; gap:8px; }
+    .btn { background:rgba(255,255,255,0.2); color:#fff; border:1px solid #fff; padding:6px 12px; border-radius:20px; font-size:12px; text-decoration:none; font-weight:bold; backdrop-filter:blur(5px); }
+    .download-btn { background:#e50914; border-color:#e50914; }
+    .reels { width:100%; height:100vh; overflow-y:scroll; scroll-snap-type:y mandatory; scrollbar-width:none; }
+    .reels::-webkit-scrollbar { display:none; }
+    .reel { width:100%; height:100vh; scroll-snap-align:start; position:relative; background:#111; }
     video { width:100%; height:100%; object-fit:cover; }
-    .info { position:absolute; bottom:30px; left:15px; z-index:10; }
+    .info { position:absolute; bottom:30px; left:15px; z-index:10; text-shadow:1px 1px 4px rgba(0,0,0,0.8); }
+    .info h3 { font-size:16px; margin-bottom:5px; color:#fff; }
+    .info p { font-size:14px; color:#ddd; }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="header">
       <div class="title">NAZAR</div>
-      <button class="sound" onclick="toggleSound()">🔊 Sound</button>
+      <div class="btn-group">
+        <a href="#" class="btn download-btn">📲 Download App</a>
+        <button class="btn" onclick="toggleSound()">🔊 Sound</button>
+      </div>
     </div>
-    <div class="reels">
-      <div class="reel"><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" loop muted playsinline preload="metadata"></video><div class="info"><h3>@nazar_official</h3><p>❤️ मोहब्बत शायरी</p></div></div>
-      <div class="reel"><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" loop muted playsinline preload="metadata"></video><div class="info"><h3>@nazar_official</h3><p>🔥 बदमाशी एटीट्यूड</p></div></div>
-      <div class="reel"><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" loop muted playsinline preload="metadata"></video><div class="info"><h3>@nazar_official</h3><p>😂 फुल कॉमेडी</p></div></div>
-    </div>
+    
+    <div class="reels" id="reelsContainer"></div>
   </div>
+
   <script>
-    const videos = document.querySelectorAll('video');
+    const videoList = [
+      { src: "https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4", tag: "❤️ मोहब्बत शायरी" },
+      { src: "https://assets.mixkit.co/videos/preview/mixkit-mother-with-her-little-daughter-eating-a-marshmallow-in-41394-large.mp4", tag: "🔥 बदमाशी एटीट्यूड" },
+      { src: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4", tag: "😂 फुल कॉमेडी" },
+      { src: "https://assets.mixkit.co/videos/preview/mixkit-fashion-model-in-neon-light-41551-large.mp4", tag: "💥 ट्रेंडिंग रील" },
+      { src: "https://assets.mixkit.co/videos/preview/mixkit-young-woman-skating-on-a-sunny-day-42721-large.mp4", tag: "✨ एटीट्यूड स्टेटस" }
+    ];
+
+    const container = document.getElementById('reelsContainer');
     let isMuted = true;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) { entry.target.play(); } else { entry.target.pause(); }
-      });
-    }, { threshold: 0.6 });
-    videos.forEach(v => observer.observe(v));
-    function toggleSound() { isMuted = !isMuted; videos.forEach(v => v.muted = isMuted); }
+
+    function addMoreReels() {
+      for (let i = 0; i < 3; i++) {
+        videoList.forEach(item => {
+          const reel = document.createElement('div');
+          reel.className = 'reel';
+          reel.innerHTML = `
+            <video src="${item.src}" loop muted playsinline preload="metadata"></video>
+            <div class="info">
+              <h3>@nazar_official</h3>
+              <p>${item.tag}</p>
+            </div>
+          `;
+          container.appendChild(reel);
+        });
+      }
+      setupObserver();
+    }
+
+    function setupObserver() {
+      const videos = document.querySelectorAll('video');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.play().catch(() => {});
+          } else {
+            entry.target.pause();
+          }
+        });
+      }, { threshold: 0.6 });
+
+      videos.forEach(v => observer.observe(v));
+    }
+
+    function toggleSound() {
+      isMuted = !isMuted;
+      document.querySelectorAll('video').forEach(v => v.muted = isMuted);
+    }
+
+    container.addEventListener('scroll', () => {
+      if (container.scrollTop + container.clientHeight >= container.scrollHeight - 800) {
+        addMoreReels();
+      }
+    });
+
+    addMoreReels();
   </script>
 </body>
 </html>
+
+
