@@ -1,52 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
+
+<html lang="en"
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Short Video Reels</title>
+  <title>NAZAR Reels</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-    }
-    .app-container {
-      width: 100%;
-      max-width: 420px;
-      height: 100vh;
-      background: #111;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      color: #e50914;
-    }
-    p {
-      color: #ccc;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { background:#000; color:#fff; display:flex; justify-content:center; height:100vh; overflow:hidden; }
+    .app { width:100%; max-width:420px; height:100vh; position:relative; }
+    .header { position:absolute; top:0; width:100%; padding:15px; z-index:20; display:flex; justify-content:space-between; }
+    .title { font-size:1.5rem; font-weight:bold; color:#e50914; }
+    .sound { background:rgba(0,0,0,0.5); color:#fff; border:1px solid #fff; padding:5px 10px; border-radius:15px; }
+    .reels { width:100%; height:100vh; overflow-y:scroll; scroll-snap-type:y mandatory; }
+    .reel { width:100%; height:100vh; scroll-snap-align:start; position:relative; }
+    video { width:100%; height:100%; object-fit:cover; }
+    .info { position:absolute; bottom:30px; left:15px; z-index:10; }
   </style>
 </head>
 <body>
-  <div class="app-container">
-    <h1>NAZAR</h1>
-    <p>Short Video Reels App</p>
+  <div class="app">
+    <div class="header">
+      <div class="title">NAZAR</div>
+      <button class="sound" onclick="toggleSound()">🔊 Sound</button>
+    </div>
+    <div class="reels">
+      <div class="reel"><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" loop muted playsinline preload="metadata"></video><div class="info"><h3>@nazar_official</h3><p>❤️ मोहब्बत शायरी</p></div></div>
+      <div class="reel"><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4" loop muted playsinline preload="metadata"></video><div class="info"><h3>@nazar_official</h3><p>🔥 बदमाशी एटीट्यूड</p></div></div>
+      <div class="reel"><video src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4" loop muted playsinline preload="metadata"></video><div class="info"><h3>@nazar_official</h3><p>😂 फुल कॉमेडी</p></div></div>
+    </div>
   </div>
+  <script>
+    const videos = document.querySelectorAll('video');
+    let isMuted = true;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) { entry.target.play(); } else { entry.target.pause(); }
+      });
+    }, { threshold: 0.6 });
+    videos.forEach(v => observer.observe(v));
+    function toggleSound() { isMuted = !isMuted; videos.forEach(v => v.muted = isMuted); }
+  </script>
 </body>
 </html>
-
-
