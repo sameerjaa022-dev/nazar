@@ -6,36 +6,36 @@
   <title>NAZAR Reels</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
+    body { background: #000; overflow: hidden; }
+    .video-container { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; }
     
-    .reel-card {
-      height: 100vh;
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-
-    /* यहाँ से वीडियो का साइज सेट होता है */
-    iframe {
-      width: 100%;
-      height: 100%;
-      max-height: 800px; 
-      border: none;
-    }
+    /* यह कोड वीडियो को स्क्रीन पर फिट करेगा */
+    video { width: 100%; height: 100%; object-fit: cover; }
   </style>
 </head>
 <body>
 
-  <div class="reel-card">
-    <!-- यहाँ वीडियो का लिंक है -->
-    <iframe src="https://www.youtube.com/embed/L_LUpnjgPso?autoplay=1&mute=0&loop=1&playlist=L_LUpnjgPso&vq=480" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <div class="video-container">
+    <!-- यहाँ अपनी वीडियो का लिंक डालें -->
+    <video id="myVideo" autoplay loop playsinline muted>
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-young-woman-looking-at-the-smartphone-41295-large.mp4" type="video/mp4">
+      आपका ब्राउज़र वीडियो नहीं चला पा रहा है।
+    </video>
   </div>
+
+  <script>
+    // यह बटन दबाते ही आवाज़ चालू हो जाएगी (ब्राउज़र के नियम के लिए)
+    document.body.addEventListener('click', function() {
+      var video = document.getElementById('myVideo');
+      if (video.muted) {
+        video.muted = false;
+      }
+    });
+  </script>
 
 </body>
 </html>
+
 
 
 
