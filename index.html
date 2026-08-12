@@ -3,49 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reels</title>
+  <title>NAZAR Reels</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
     .container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
-    .reel { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
+    .reel { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #111; }
     video { width: 100%; height: 100%; object-fit: cover; }
-    .ui { position: absolute; bottom: 20px; left: 15px; z-index: 10; }
+    .ui { position: absolute; bottom: 30px; left: 15px; z-index: 10; text-shadow: 1px 1px 3px #000; }
     .actions { position: absolute; right: 15px; bottom: 80px; z-index: 10; text-align: center; }
-    .btn { font-size: 25px; margin-bottom: 20px; display: block; }
+    .btn { font-size: 28px; margin-bottom: 20px; display: block; cursor: pointer; text-shadow: 1px 1px 3px #000; }
   </style>
 </head>
 <body>
 
-  <div class="container" id="feed">
-    <!-- वीडियो 1 -->
-    <div class="reel">
-      <video src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4" autoplay loop muted playsinline></video>
-      <div class="ui"><h3>@nazar_official</h3><p>दुनिया की खूबसूरत वीडियो 🌍</p></div>
-      <div class="actions"><div class="btn">❤️</div><div class="btn">💬</div><div class="btn">🔁</div></div>
-    </div>
-    <!-- वीडियो 2 -->
-    <div class="reel">
-      <video src="https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4" autoplay loop muted playsinline></video>
-      <div class="ui"><h3>@desi_vibes</h3><p>ट्रेंडिंग रील्स 🔥</p></div>
-      <div class="actions"><div class="btn">❤️</div><div class="btn">💬</div><div class="btn">🔁</div></div>
-    </div>
-  </div>
+  <div class="container" id="feed"></div>
 
   <script>
-    // यह पक्का करेगा कि वीडियो स्क्रीन पर आते ही चल जाए
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const v = entry.target.querySelector('video');
-        if (entry.isIntersecting) v.play();
-        else { v.pause(); v.currentTime = 0; }
-      });
-    }, { threshold: 0.7 });
+    // अनलिमिटेड और पक्के चलने वाले वीडियो की लिस्ट
+    let videoList = [
+      { src: "https://www.w3schools.com/html/mov_bbb.mp4", user: "nazar_global_1", desc: "दुनिया की शानदार वीडियो 🌍" },
+      { src: "https://media.w3.org/2010/05/sintel/trailer.mp4", user: "nazar_global_2", desc: "ट्रेंडिंग वायरल रील्स 🔥" },
+      { src: "https://www.w3schools.com/html/movie.mp4", user: "nazar_global_3", desc: "मज़ेदार क्लिप्स 😎" },
+      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", user: "nazar_global_4", desc: "सुपरहिट एंटरटेनमेंट 🚀" },
+      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", user: "nazar_global_5", desc: "नया अंदाज़ ✨" }
+    ];
 
-    document.querySelectorAll('.reel').forEach(r => observer.observe(r));
+    const feed = document.getElementById('feed');
+
+    function loadReels() {
+      feed.innerHTML = "";
+      videoList.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'reel';
+        div.innerHTML = `
+          <video src="${item.src}" loop playsinline autoplay muted></video>
+          <div class="ui">
+            <h3>@${item.user}</h3>
+            <p>${item.desc}</p>
+          </div>
+          <div class="actions">
+            <div class="btn" onclick="this.style.color='red'">❤️</div>
+            <div class="btn">💬</div>
+            <div class="btn">🔁</div>
+          </div>
+        `;
+        feed.appendChild(div);
+      });
+      initObserver();
+    }
+
+    loadReels();
+
+    // जैसे ही आप नीचे स्क्रॉल करोगे, अगली रील अपने आप चलने लगेगी
+    function initObserver() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const v = entry.target.querySelector('video');
+          if (entry.isIntersecting) {
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+            v.currentTime = 0;
+          }
+        });
+      }, { threshold: 0.6 });
+
+      document.querySelectorAll('.reel').forEach(r => observer.observe(r));
+    }
   </script>
 </body>
 </html>
+
 
 
 
