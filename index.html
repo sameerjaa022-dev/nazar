@@ -3,181 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR - Global Social Media</title>
+  <title>NAZAR Reels</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { background: #000; color: #fff; font-family: Arial, sans-serif; overflow: hidden; }
-    
-    /* Header */
-    .header { position: fixed; top: 0; width: 100%; z-index: 10; display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent); }
-    .logo { color: #ff0050; font-size: 24px; font-weight: bold; letter-spacing: 1px; }
-    .header-btns { display: flex; gap: 8px; }
-    .action-btn { background: rgba(255, 255, 255, 0.2); color: #fff; border: 1px solid #fff; padding: 5px 10px; border-radius: 15px; font-size: 11px; cursor: pointer; }
-
-    /* Reels View */
-    .reels-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
-    .reel { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #111; }
+    body, html { margin: 0; padding: 0; background: #000; height: 100%; overflow: hidden; }
+    .container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
+    .box { height: 100vh; scroll-snap-align: start; position: relative; }
     video { width: 100%; height: 100%; object-fit: cover; }
-    .overlay { position: absolute; bottom: 60px; left: 15px; z-index: 5; text-shadow: 1px 1px 4px #000; }
-    .overlay h3 { font-size: 16px; margin-bottom: 5px; color: #fff; }
-    .overlay p { font-size: 13px; color: #ddd; }
-
-    /* Bottom Navigation / Interaction Bar */
-    .nav-bar { position: fixed; bottom: 0; width: 100%; height: 55px; background: rgba(0,0,0,0.85); display: flex; justify-content: space-around; align-items: center; z-index: 10; border-top: 1px solid #333; }
-    .nav-item { color: #fff; font-size: 12px; text-align: center; cursor: pointer; background: none; border: none; }
-    .nav-item span { display: block; font-size: 18px; }
-
-    /* Popups (Upload, Chat, Call) */
-    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 20; padding: 20px; overflow-y: auto; }
-    .modal-content { background: #222; padding: 20px; border-radius: 10px; margin-top: 50px; text-align: center; }
-    .modal-content input, .modal-content textarea { width: 100%; padding: 10px; margin: 10px 0; background: #333; border: 1px solid #444; color: #fff; border-radius: 5px; }
-    .close-btn { background: #ff0050; color: #fff; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-top: 10px; }
+    .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; color: white; font-size: 20px; }
   </style>
 </head>
 <body>
 
-  <!-- Top Header -->
-  <div class="header">
-    <div class="logo">NAZAR</div>
-    <div class="header-btns">
-      <button class="action-btn" onclick="openModal('uploadModal')">➕ पोस्ट डालें</button>
-      <button class="action-btn" onclick="toggleSound()" id="soundBtn">🔇 आवाज़</button>
+  <div class="container" id="c">
+    <!-- वीडियो 1 -->
+    <div class="box">
+      <video src="https://www.w3schools.com/html/mov_bbb.mp4" playsinline autoplay loop muted></video>
+      <div class="play-overlay" onclick="this.style.display='none'; this.previousElementSibling.play()">▶ टच करें</div>
     </div>
-  </div>
-
-  <!-- Reels Feed -->
-  <div class="reels-container" id="reelsContainer"></div>
-
-  <!-- Bottom Instagram-like Menu -->
-  <div class="nav-bar">
-    <button class="nav-item" onclick="alert('आप होम फीड पर हैं!')"><span>🏠</span>होम</button>
-    <button class="nav-item" onclick="openModal('chatModal')"><span>💬</span>चैट</button>
-    <button class="nav-item" onclick="openModal('callModal')"><span>📞</span>कॉल</button>
-    <button class="nav-item" onclick="openModal('uploadModal')"><span>📤</span>अपलोड</button>
-  </div>
-
-  <!-- Upload Modal -->
-  <div class="modal" id="uploadModal">
-    <div class="modal-content">
-      <h3 style="color:#ff0050; margin-bottom:10px;">अपनी रील्स या वीडियो डालें</h3>
-      <p style="font-size:12px; color:#bbb;">वीडियो का डायरेक्ट लिंक यहाँ डालें:</p>
-      <input type="text" id="videoUrlInput" placeholder="यहाँ वीडियो लिंक पेस्ट करें (.mp4)">
-      <button class="action-btn" style="background:#ff0050; padding:10px 20px;" onclick="addNewVideo()">डालें (Post)</button>
-      <br>
-      <button class="close-btn" onclick="closeModal('uploadModal')">बंद करें</button>
-    </div>
-  </div>
-
-  <!-- Chat Modal -->
-  <div class="modal" id="chatModal">
-    <div class="modal-content" style="text-align: left;">
-      <h3 style="color:#ff0050; text-align:center;">NAZAR चैट रूम 💬</h3>
-      <div id="chatBox" style="height: 150px; background: #111; border: 1px solid #333; border-radius: 5px; padding: 10px; overflow-y: scroll; margin: 10px 0; font-size: 13px;">
-        <p><b>Rahul:</b> Hi everyone! 🌍</p>
-        <p><b>Priya:</b> Hello from India! 👋</p>
-      </div>
-      <input type="text" id="chatInput" placeholder="संदेश लिखें...">
-      <button class="action-btn" style="background:#ff0050; width:100%;" onclick="sendMessage()">भेजें</button>
-      <center><button class="close-btn" onclick="closeModal('chatModal')">बंद करें</button></center>
-    </div>
-  </div>
-
-  <!-- Call Modal -->
-  <div class="modal" id="callModal">
-    <div class="modal-content">
-      <h3 style="color:#ff0050;">NAZAR वीडियो कॉल 📞</h3>
-      <p style="font-size: 13px; margin: 15px 0; color: #ccc;">ऑनलाइन यूजर से जुड़ने के लिए तैयार हैं?</p>
-      <button class="action-btn" style="background: green; padding: 10px 20px; font-size: 14px;" onclick="alert('कॉल कनेक्ट हो रही है... कृपया प्रतीक्षा करें!')">🟢 वीडियो कॉल शुरू करें</button>
-      <br><br>
-      <button class="close-btn" onclick="closeModal('callModal')">काटें / बंद करें</button>
+    <!-- वीडियो 2 -->
+    <div class="box">
+      <video src="https://media.w3.org/2010/05/sintel/trailer.mp4" playsinline autoplay loop muted></video>
+      <div class="play-overlay" onclick="this.style.display='none'; this.previousElementSibling.play()">▶ टच करें</div>
     </div>
   </div>
 
   <script>
-    let videoList = [
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyplays.mp4",
-      "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4"
-    ];
-
-    const container = document.getElementById('reelsContainer');
-    let isMuted = true;
-
-    function renderReels() {
-      container.innerHTML = "";
-      videoList.forEach((src, index) => {
-        const div = document.createElement('div');
-        div.className = 'reel';
-        div.innerHTML = `
-          <video src="${src}" loop playsinline muted autoplay onclick="togglePlay(this)"></video>
-          <div class="overlay">
-            <h3>@nazar_global_${index + 1}</h3>
-            <p>दुनियाभर की ट्रेंडिंग रील्स 🌍</p>
-          </div>
-        `;
-        container.appendChild(div);
+    // यह पक्का करेगा कि वीडियो चालू हो जाए
+    document.querySelectorAll('video').forEach(vid => {
+      vid.play().catch(error => {
+        console.log("Auto-play blocked, user interaction needed.");
       });
-      startObserving();
-    }
-
-    renderReels();
-
-    function addNewVideo() {
-      const url = document.getElementById('videoUrlInput').value;
-      if(url) {
-        videoList.push(url);
-        renderReels();
-        closeModal('uploadModal');
-        alert('सफलतापूर्वक पोस्ट अपलोड हो गई!');
-        document.getElementById('videoUrlInput').value = '';
-      } else {
-        alert('कृपया सही लिंक दर्ज करें!');
-      }
-    }
-
-    function togglePlay(video) {
-      if (video.paused) { video.play(); } else { video.pause(); }
-    }
-
-    function toggleSound() {
-      isMuted = !isMuted;
-      document.querySelectorAll('video').forEach(v => v.muted = isMuted);
-      document.getElementById('soundBtn').innerText = isMuted ? "🔇 आवाज़" : "🔊 आवाज़ चालु";
-    }
-
-    function openModal(id) { document.getElementById(id).style.display = 'block'; }
-    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
-    function sendMessage() {
-      const text = document.getElementById('chatInput').value;
-      if(text) {
-        const chatBox = document.getElementById('chatBox');
-        chatBox.innerHTML += `<p><b>You:</b> ${text}</p>`;
-        document.getElementById('chatInput').value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
-      }
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        const video = entry.target.querySelector('video');
-        if (entry.isIntersecting) {
-          video.play().catch(() => {});
-        } else {
-          video.pause();
-          video.currentTime = 0;
-        }
-      });
-    }, { threshold: 0.6 });
-
-    function startObserving() {
-      document.querySelectorAll('.reel').forEach(reel => observer.observe(reel));
-    }
+    });
   </script>
 </body>
-  </html>
+</html>
+
 
 
 
