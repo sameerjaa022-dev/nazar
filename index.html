@@ -3,93 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Reels</title>
+  <title>NAZAR Unlimited HD Reels</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
-    
-    .reels-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-    .reels-container::-webkit-scrollbar { display: none; }
-    
-    .reel-card { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #111; }
-    
-    video { width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 2; }
-    
-    /* जब तक वीडियो लोड हो, तब तक यह मैसेज दिखेगा */
-    .loading-text { position: absolute; z-index: 1; color: #fff; font-size: 16px; font-weight: bold; text-align: center; }
-
-    /* ऊपर आवाज़ चालू करने का बटन */
-    .audio-top-btn { position: fixed; top: 15px; right: 15px; z-index: 100; background: rgba(0,0,0,0.8); color: #fff; border: 1px solid #fff; padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: bold; cursor: pointer; }
-
-    /* दाईं ओर के बटन */
-    .controls { position: absolute; right: 15px; bottom: 80px; z-index: 10; text-align: center; }
-    .btn { background: rgba(0,0,0,0.6); color: white; border: 1px solid white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 12px; cursor: pointer; }
-    .share-btn { background: #25D366; border: none; }
-    .download-btn { background: #ff0050; color: white; border: none; padding: 7px 10px; border-radius: 20px; font-weight: bold; cursor: pointer; margin-top: 5px; display: block; text-decoration: none; font-size: 11px; }
-
-    /* नीचे आईडी और कैप्शन */
-    .info { position: absolute; bottom: 30px; left: 15px; right: 80px; z-index: 10; text-shadow: 1px 1px 3px rgba(0,0,0,0.9); pointer-events: none; z-index: 5; }
+    body { background: #000; color: #fff; overflow: hidden; }
+    .container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
+    .container::-webkit-scrollbar { display: none; }
+    .card { height: 100vh; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; background: #000; }
+    video { width: 100%; height: 100%; object-fit: cover; }
+    .btn { position: fixed; top: 15px; right: 15px; z-index: 100; background: rgba(0,0,0,0.7); color: #fff; padding: 10px 20px; border-radius: 20px; border: 1px solid #fff; }
   </style>
 </head>
 <body>
-
-  <button class="audio-top-btn" onclick="toggleAudio()" id="soundBtn">🔊 आवाज़ चालू करें</button>
-  <div class="reels-container" id="feed"></div>
-
+  <button class="btn" onclick="sound()">🔊 आवाज़</button>
+  <div class="container" id="box"></div>
   <script>
-    // एकदम पक्के चलने वाले वीडियो लिंक्स
-    const reels = [
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4", title: "प्यार और मोहब्बत का अंदाज़ ❤️", user: "@Mohabbat_HD" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", title: "बदमाशी और खतरनाक स्वैग 😎", user: "@Badmashi_King" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4", title: "हंसते-हंसते पेट में दर्द कॉमेडी 😂", user: "@Comedy_Blast" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4", title: "ब्रेकअप और दर्द भरी शायरी 💔", user: "@Dard_Status" },
-      { src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4", title: "NAZAR स्पेशल HD वायरल रील 🔥", user: "@Nazar_Official" }
+    // यहाँ जितने चाहो लिंक बढ़ाते जाओ, सब चलेगा!
+    const videos = [
+      "https://www.w3schools.com/html/movie.mp4",
+      "https://www.w3schools.com/html/mov_bbb.mp4",
+      "https://www.w3schools.com/html/movie.mp4",
+      "https://www.w3schools.com/html/mov_bbb.mp4",
+      "https://www.w3schools.com/html/movie.mp4"
     ];
-
-    const feed = document.getElementById('feed');
-    reels.forEach(r => {
-      let shareText = encodeURIComponent(`देख भाई क्या गज़ब की रील है: ${r.title} - NAZAR Reels पर देख!`);
-      let shareUrl = `https://api.whatsapp.com/send?text=${shareText}`;
-
-      feed.innerHTML += `
-        <div class="reel-card">
-          <div class="loading-text">⏳ वीडियो लोड हो रही है...</div>
-          <video src="${r.src}" loop playsinline autoplay muted></video>
-          <div class="controls">
-            <div class="btn" onclick="this.style.background='#ff2d55'">❤️</div>
-            <a href="${shareUrl}" target="_blank" class="btn share-btn" title="दोस्तों को भेजें">📤</a>
-            <a href="${r.src}" download class="download-btn">⬇️ डाउनलोड</a>
-          </div>
-          <div class="info">
-            <h4 style="font-size:14px; margin-bottom:4px; color:#ddd;">${r.user}</h4>
-            <h3 style="font-size:15px; font-weight:normal;">${r.title}</h3>
-          </div>
-        </div>`;
+    const box = document.getElementById('box');
+    videos.forEach(v => {
+      box.innerHTML += `<div class="card"><video src="${v}" loop playsinline autoplay muted></video></div>`;
     });
-
-    let isMuted = true;
-    function toggleAudio() {
-      isMuted = !isMuted;
-      document.querySelectorAll('video').forEach(v => v.muted = isMuted);
-      document.getElementById('soundBtn').innerText = isMuted ? "🔊 आवाज़ चालू करें" : "🔇 आवाज़ बंद करें";
+    function sound() {
+      document.querySelectorAll('video').forEach(v => v.muted = !v.muted);
     }
-
-    const observer = new IntersectionObserver((entries) => {
+    const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         let v = e.target.querySelector('video');
-        if (e.isIntersecting) {
-          v.play().catch(() => {});
-        } else {
-          v.pause();
-          v.currentTime = 0;
-        }
+        e.isIntersecting ? v.play() : v.pause();
       });
     }, { threshold: 0.6 });
-
-    document.querySelectorAll('.reel-card').forEach(c => observer.observe(c));
+    document.querySelectorAll('.card').forEach(c => obs.observe(c));
   </script>
 </body>
 </html>
+
 
 
 
