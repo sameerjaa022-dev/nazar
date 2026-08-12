@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html lang="hi" id="htmlTag">
+<html lang="hi">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="pageTitle">NAZAR Reels</title>
+  <title>NAZAR Reels App</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
-    
+
+    /* रील्स का पूरा डिब्बा जो इंस्टाग्राम की तरह स्वाइप होगा */
     .reels-container {
       height: 100vh;
       overflow-y: scroll;
@@ -16,6 +17,7 @@
     }
     .reels-container::-webkit-scrollbar { display: none; }
 
+    /* हर एक रील कार्ड */
     .reel-card {
       height: 100vh;
       width: 100vw;
@@ -27,60 +29,135 @@
       background: #000;
     }
 
-    iframe {
+    /* वीडियो फुल स्क्रीन */
+    video {
       width: 100%;
       height: 100%;
-      border: none;
+      object-fit: cover;
     }
-    
-    .lang-badge {
+
+    /* दाईं ओर इंस्टाग्राम जैसे बटन (लाइक, शेयर आदि) */
+    .right-actions {
+      position: absolute;
+      right: 15px;
+      bottom: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      z-index: 10;
+    }
+    .action-btn {
+      background: rgba(0,0,0,0.5);
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* नीचे यूजर का नाम और कैप्शन */
+    .reel-info {
+      position: absolute;
+      bottom: 25px;
+      left: 15px;
+      right: 70px;
+      z-index: 10;
+    }
+    .username { font-weight: bold; font-size: 15px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+    .caption { font-size: 13px; opacity: 0.9; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
+
+    /* ऊपर आवाज़ चालू/बंद करने का बटन */
+    .top-sound-btn {
       position: fixed;
       top: 15px;
       right: 15px;
       z-index: 100;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.6);
       color: #fff;
-      padding: 8px 15px;
+      padding: 8px 16px;
       border-radius: 20px;
-      border: 1px solid #fff;
-      font-size: 12px;
+      border: 1px solid rgba(255,255,255,0.3);
+      font-size: 13px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
-  <div class="lang-badge" id="langBadge">🇮🇳 India - स्पेशल रील्स</div>
+  <button class="top-sound-btn" onclick="toggleAudio()" id="soundBtn">🔊 आवाज़ चालू करें</button>
 
-  <div class="reels-container">
-    <div class="reel-card">
-      <iframe id="reelVideo" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    </div>
-  </div>
+  <div class="reels-container" id="reelFeed"></div>
 
   <script>
-    // यह चेक करेगा कि यूजर कहाँ से है और वैसी ही भाषा और वीडियो दिखाएगा
-    const userLang = navigator.language || navigator.userLanguage;
-    const videoElement = document.getElementById('reelVideo');
-    const badgeElement = document.getElementById('langBadge');
-    const htmlTag = document.getElementById('htmlTag');
+    // यहाँ आप अपनी पसंद की जितनी चाहें रील्स के लिंक और नाम डाल सकते हैं
+    const reelsData = [
+      {
+        src: "https://assets.mixkit.co/videos/preview/mixkit-young-woman-looking-at-the-smartphone-41295-large.mp4",
+        user: "@Nazar_Official",
+        text: "🔥 पहली ट्रेंडिंग रील - NAZAR स्पेशल"
+      },
+      {
+        src: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-lights-playing-with-her-phone-41297-large.mp4",
+        user: "@Nazar_Vibes",
+        text: "😎 स्वैग वाला अंदाज़ #trending"
+      },
+      {
+        src: "https://assets.mixkit.co/videos/preview/mixkit-stylish-woman-posing-in-a-studio-41298-large.mp4",
+        user: "@Nazar_Style",
+        text: "✨ नया वायरल वीडियो 🚀"
+      }
+    ];
 
-    if (userLang.startsWith('hi') || userLang.includes('IN')) {
-      // अगर यूजर इंडिया का है (हिंदी या भारतीय भाषा)
-      htmlTag.lang = 'hi';
-      badgeElement.innerText = "🇮🇳 इंडिया ट्रेंडिंग रील्स";
-      // यहाँ इंडिया की शॉर्ट्स वीडियो का लिंक है (1 मिनट से छोटी)
-      videoElement.src = "https://www.youtube.com/embed/L_LUpnjgPso?autoplay=1&mute=0&loop=1&playlist=L_LUpnjgPso";
-    } else {
-      // अगर यूजर किसी दूसरे देश का है
-      htmlTag.lang = 'en';
-      badgeElement.innerText = "🌍 Global Trending Reels";
-      // दूसरे देश के लिए इंटरनेशनल वीडियो लिंक
-      videoElement.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&loop=1&playlist=dQw4w9WgXcQ";
+    const feed = document.getElementById('reelFeed');
+
+    reelsData.forEach(item => {
+      feed.innerHTML += `
+        <div class="reel-card">
+          <video src="${item.src}" loop playsinline autoplay muted></video>
+          
+          <div class="right-actions">
+            <button class="action-btn" onclick="this.style.color = this.style.color === 'red' ? '#fff' : 'red'">❤️</button>
+            <button class="action-btn">💬</button>
+            <button class="action-btn">↗️</button>
+          </div>
+
+          <div class="reel-info">
+            <div class="username">${item.user}</div>
+            <div class="caption">${item.text}</div>
+          </div>
+        </div>
+      `;
+    });
+
+    let isMuted = true;
+    function toggleAudio() {
+      isMuted = !isMuted;
+      document.querySelectorAll('video').forEach(v => v.muted = isMuted);
+      document.getElementById('soundBtn').innerText = isMuted ? "🔊 आवाज़ चालू करें" : "🔇 आवाज़ बंद करें";
     }
-  </script>
 
+    // जो रील सामने आएगी, सिर्फ वही चलेगी (ऑटो-प्ले)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        let v = e.target.querySelector('video');
+        if (e.isIntersecting) {
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.6 });
+
+    document.querySelectorAll('.reel-card').forEach(c => observer.observe(c));
+  </script>
 </body>
-</html>
+</html
 
 
 
