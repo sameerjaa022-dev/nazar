@@ -3,47 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Unlimited HD Reels</title>
+  <title>NAZAR Trending Reel</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; overflow: hidden; }
-    .container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-    .container::-webkit-scrollbar { display: none; }
-    .card { height: 100vh; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; background: #000; }
-    video { width: 100%; height: 100%; object-fit: cover; }
-    .btn { position: fixed; top: 15px; right: 15px; z-index: 100; background: rgba(0,0,0,0.7); color: #fff; padding: 10px 20px; border-radius: 20px; border: 1px solid #fff; }
+    body { background: #000; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
   </style>
 </head>
 <body>
-  <button class="btn" onclick="sound()">🔊 आवाज़</button>
-  <div class="container" id="box"></div>
-  <script>
-    // यहाँ जितने चाहो लिंक बढ़ाते जाओ, सब चलेगा!
-    const videos = [
-      "https://www.w3schools.com/html/movie.mp4",
-      "https://www.w3schools.com/html/mov_bbb.mp4",
-      "https://www.w3schools.com/html/movie.mp4",
-      "https://www.w3schools.com/html/mov_bbb.mp4",
-      "https://www.w3schools.com/html/movie.mp4"
-    ];
-    const box = document.getElementById('box');
-    videos.forEach(v => {
-      box.innerHTML += `<div class="card"><video src="${v}" loop playsinline autoplay muted></video></div>`;
-    });
-    function sound() {
-      document.querySelectorAll('video').forEach(v => v.muted = !v.muted);
-    }
-    const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        let v = e.target.querySelector('video');
-        e.isIntersecting ? v.play() : v.pause();
-      });
-    }, { threshold: 0.6 });
-    document.querySelectorAll('.card').forEach(c => obs.observe(c));
-  </script>
+
+  <!-- यहाँ इंस्टाग्राम वाला एम्बेड कोड पेस्ट करें -->
+  [यहाँ अपना एम्बेड कोड डालें]
+
 </body>
 </html>
 
+थोड़ा सा हटाकर
 
 
 
