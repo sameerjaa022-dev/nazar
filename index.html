@@ -8,7 +8,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
 
-    /* रील्स का पूरा डिब्बा जो इंस्टाग्राम की तरह स्वाइप होगा */
     .reels-container {
       height: 100vh;
       overflow-y: scroll;
@@ -17,7 +16,6 @@
     }
     .reels-container::-webkit-scrollbar { display: none; }
 
-    /* हर एक रील कार्ड */
     .reel-card {
       height: 100vh;
       width: 100vw;
@@ -29,14 +27,12 @@
       background: #000;
     }
 
-    /* वीडियो फुल स्क्रीन */
     video {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
 
-    /* दाईं ओर इंस्टाग्राम जैसे बटन (लाइक, शेयर आदि) */
     .right-actions {
       position: absolute;
       right: 15px;
@@ -61,7 +57,6 @@
       cursor: pointer;
     }
 
-    /* नीचे यूजर का नाम और कैप्शन */
     .reel-info {
       position: absolute;
       bottom: 25px;
@@ -72,7 +67,6 @@
     .username { font-weight: bold; font-size: 15px; margin-bottom: 5px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
     .caption { font-size: 13px; opacity: 0.9; text-shadow: 1px 1px 2px rgba(0,0,0,0.8); }
 
-    /* ऊपर आवाज़ चालू/बंद करने का बटन */
     .top-sound-btn {
       position: fixed;
       top: 15px;
@@ -95,20 +89,20 @@
   <div class="reels-container" id="reelFeed"></div>
 
   <script>
-    // यहाँ आप अपनी पसंद की जितनी चाहें रील्स के लिंक और नाम डाल सकते हैं
+    // ये बिल्कुल पक्के और चालू वीडियो लिंक हैं
     const reelsData = [
       {
-        src: "https://assets.mixkit.co/videos/preview/mixkit-young-woman-looking-at-the-smartphone-41295-large.mp4",
+        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
         user: "@Nazar_Official",
         text: "🔥 पहली ट्रेंडिंग रील - NAZAR स्पेशल"
       },
       {
-        src: "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-lights-playing-with-her-phone-41297-large.mp4",
+        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
         user: "@Nazar_Vibes",
         text: "😎 स्वैग वाला अंदाज़ #trending"
       },
       {
-        src: "https://assets.mixkit.co/videos/preview/mixkit-stylish-woman-posing-in-a-studio-41298-large.mp4",
+        src: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
         user: "@Nazar_Style",
         text: "✨ नया वायरल वीडियो 🚀"
       }
@@ -142,7 +136,6 @@
       document.getElementById('soundBtn').innerText = isMuted ? "🔊 आवाज़ चालू करें" : "🔇 आवाज़ बंद करें";
     }
 
-    // जो रील सामने आएगी, सिर्फ वही चलेगी (ऑटो-प्ले)
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         let v = e.target.querySelector('video');
@@ -157,7 +150,8 @@
     document.querySelectorAll('.reel-card').forEach(c => observer.observe(c));
   </script>
 </body>
-</html
+</html>
+
 
 
 
