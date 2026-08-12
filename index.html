@@ -6,35 +6,34 @@
   <title>NAZAR Reels</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; overflow: hidden; }
-    .video-container { height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; }
+    body { background: #000; overflow: hidden; height: 100vh; width: 100vw; display: flex; justify-content: center; align-items: center; }
     
-    /* यह कोड वीडियो को स्क्रीन पर फिट करेगा */
-    video { width: 100%; height: 100%; object-fit: cover; }
+    /* यह कोड वीडियो को बिल्कुल फुल स्क्रीन कर देगा, कोई डिब्बा नहीं दिखेगा */
+    video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
   </style>
 </head>
 <body>
 
-  <div class="video-container">
-    <!-- यहाँ अपनी वीडियो का लिंक डालें -->
-    <video id="myVideo" autoplay loop playsinline muted>
-      <source src="https://assets.mixkit.co/videos/preview/mixkit-young-woman-looking-at-the-smartphone-41295-large.mp4" type="video/mp4">
-      आपका ब्राउज़र वीडियो नहीं चला पा रहा है।
-    </video>
-  </div>
+  <!-- यह छोटी और बढ़िया रील्स वीडियो है जो सीधे फुल स्क्रीन चलेगी -->
+  <video id="reelVideo" src="https://assets.mixkit.co/videos/preview/mixkit-young-woman-looking-at-the-smartphone-41295-large.mp4" autoplay loop playsinline muted></video>
 
   <script>
-    // यह बटन दबाते ही आवाज़ चालू हो जाएगी (ब्राउज़र के नियम के लिए)
+    // जैसे ही आप स्क्रीन पर कहीं भी टच करेंगे, वीडियो की आवाज़ चालू हो जाएगी
     document.body.addEventListener('click', function() {
-      var video = document.getElementById('myVideo');
-      if (video.muted) {
-        video.muted = false;
+      var v = document.getElementById('reelVideo');
+      if (v.muted) {
+        v.muted = false;
       }
     });
   </script>
 
 </body>
 </html>
+
 
 
 
