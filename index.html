@@ -1,27 +1,87 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi" id="htmlTag">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Shorts Reels</title>
+  <title id="pageTitle">NAZAR Reels</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
     
-    /* वीडियो को एकदम साफ़ और मोबाइल की स्क्रीन पर फिट करने के लिए */
-    .video-box { width: 100%; max-width: 400px; height: 100vh; position: relative; }
-    iframe { width: 100%; height: 100%; border: none; }
+    .reels-container {
+      height: 100vh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none;
+    }
+    .reels-container::-webkit-scrollbar { display: none; }
+
+    .reel-card {
+      height: 100vh;
+      width: 100vw;
+      scroll-snap-align: start;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    
+    .lang-badge {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 100;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      padding: 8px 15px;
+      border-radius: 20px;
+      border: 1px solid #fff;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
 
-  <div class="video-box">
-    <!-- यहाँ सीधे YouTube की शॉर्ट्स वीडियो एकदम साफ़ चलेगी -->
-    <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&loop=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <div class="lang-badge" id="langBadge">🇮🇳 India - स्पेशल रील्स</div>
+
+  <div class="reels-container">
+    <div class="reel-card">
+      <iframe id="reelVideo" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
   </div>
+
+  <script>
+    // यह चेक करेगा कि यूजर कहाँ से है और वैसी ही भाषा और वीडियो दिखाएगा
+    const userLang = navigator.language || navigator.userLanguage;
+    const videoElement = document.getElementById('reelVideo');
+    const badgeElement = document.getElementById('langBadge');
+    const htmlTag = document.getElementById('htmlTag');
+
+    if (userLang.startsWith('hi') || userLang.includes('IN')) {
+      // अगर यूजर इंडिया का है (हिंदी या भारतीय भाषा)
+      htmlTag.lang = 'hi';
+      badgeElement.innerText = "🇮🇳 इंडिया ट्रेंडिंग रील्स";
+      // यहाँ इंडिया की शॉर्ट्स वीडियो का लिंक है (1 मिनट से छोटी)
+      videoElement.src = "https://www.youtube.com/embed/L_LUpnjgPso?autoplay=1&mute=0&loop=1&playlist=L_LUpnjgPso";
+    } else {
+      // अगर यूजर किसी दूसरे देश का है
+      htmlTag.lang = 'en';
+      badgeElement.innerText = "🌍 Global Trending Reels";
+      // दूसरे देश के लिए इंटरनेशनल वीडियो लिंक
+      videoElement.src = "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=0&loop=1&playlist=dQw4w9WgXcQ";
+    }
+  </script>
 
 </body>
 </html>
+
 
 
 
