@@ -3,40 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Reels</title>
+  <title>Reels</title>
   <style>
-    body, html { margin: 0; padding: 0; background: #000; height: 100%; overflow: hidden; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
     .container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; }
-    .box { height: 100vh; scroll-snap-align: start; position: relative; }
+    .reel { height: 100vh; scroll-snap-align: start; position: relative; display: flex; align-items: center; justify-content: center; background: #000; }
     video { width: 100%; height: 100%; object-fit: cover; }
-    .play-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 10; color: white; font-size: 20px; }
+    .ui { position: absolute; bottom: 20px; left: 15px; z-index: 10; }
+    .actions { position: absolute; right: 15px; bottom: 80px; z-index: 10; text-align: center; }
+    .btn { font-size: 25px; margin-bottom: 20px; display: block; }
   </style>
 </head>
 <body>
 
-  <div class="container" id="c">
+  <div class="container" id="feed">
     <!-- वीडियो 1 -->
-    <div class="box">
-      <video src="https://www.w3schools.com/html/mov_bbb.mp4" playsinline autoplay loop muted></video>
-      <div class="play-overlay" onclick="this.style.display='none'; this.previousElementSibling.play()">▶ टच करें</div>
+    <div class="reel">
+      <video src="https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4" autoplay loop muted playsinline></video>
+      <div class="ui"><h3>@nazar_official</h3><p>दुनिया की खूबसूरत वीडियो 🌍</p></div>
+      <div class="actions"><div class="btn">❤️</div><div class="btn">💬</div><div class="btn">🔁</div></div>
     </div>
     <!-- वीडियो 2 -->
-    <div class="box">
-      <video src="https://media.w3.org/2010/05/sintel/trailer.mp4" playsinline autoplay loop muted></video>
-      <div class="play-overlay" onclick="this.style.display='none'; this.previousElementSibling.play()">▶ टच करें</div>
+    <div class="reel">
+      <video src="https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-sign-1232-large.mp4" autoplay loop muted playsinline></video>
+      <div class="ui"><h3>@desi_vibes</h3><p>ट्रेंडिंग रील्स 🔥</p></div>
+      <div class="actions"><div class="btn">❤️</div><div class="btn">💬</div><div class="btn">🔁</div></div>
     </div>
   </div>
 
   <script>
-    // यह पक्का करेगा कि वीडियो चालू हो जाए
-    document.querySelectorAll('video').forEach(vid => {
-      vid.play().catch(error => {
-        console.log("Auto-play blocked, user interaction needed.");
+    // यह पक्का करेगा कि वीडियो स्क्रीन पर आते ही चल जाए
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const v = entry.target.querySelector('video');
+        if (entry.isIntersecting) v.play();
+        else { v.pause(); v.currentTime = 0; }
       });
-    });
+    }, { threshold: 0.7 });
+
+    document.querySelectorAll('.reel').forEach(r => observer.observe(r));
   </script>
 </body>
 </html>
+
 
 
 
