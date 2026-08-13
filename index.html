@@ -1,58 +1,5 @@
-<!DOCTYPE html>
-<html lang="hi">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NAZAR Unlimited Reels</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; overflow: hidden; }
-    .scroll-container { height: 100vh; overflow-y: scroll; scroll-snap-type: y mandatory; scrollbar-width: none; }
-    .scroll-container::-webkit-scrollbar { display: none; }
-    .reel { height: 100vh; width: 100vw; scroll-snap-align: start; position: relative; }
-    video { width: 100%; height: 100%; object-fit: cover; }
-  </style>
-</head>
-<body>
+https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4
 
-  <div class="scroll-container" id="container"></div>
-
-  <script>
-    // ये छोटे वीडियो के लिंक हैं जो बार-बार चलते रहेंगे
-    const videoLinks = [
-      "https://assets.mixkit.co/videos/preview/mixkit-young-woman-looking-at-the-smartphone-41295-large.mp4",
-      "https://assets.mixkit.co/videos/preview/mixkit-girl-in-neon-lights-playing-with-her-phone-41297-large.mp4",
-      "https://assets.mixkit.co/videos/preview/mixkit-stylish-woman-posing-in-a-studio-41298-large.mp4"
-    ];
-
-    const container = document.getElementById('container');
-
-    // अनलिमिटेड वीडियो बनाने का लूप
-    function loadMore() {
-      for(let i = 0; i < 10; i++) {
-        videoLinks.forEach(link => {
-          let div = document.createElement('div');
-          div.className = 'reel';
-          div.innerHTML = `<video src="${link}" loop playsinline muted></video>`;
-          container.appendChild(div);
-        });
-      }
-    }
-
-    loadMore();
-
-    // जैसे ही रील सामने आए, वीडियो प्ले हो जाए
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        let v = entry.target.querySelector('video');
-        if(entry.isIntersecting) { v.play(); } else { v.pause(); v.currentTime = 0; }
-      });
-    }, { threshold: 0.7 });
-
-    document.querySelectorAll('.reel').forEach(r => observer.observe(r));
-  </script>
-</body>
-</html>
 
 
 
